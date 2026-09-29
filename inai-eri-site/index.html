@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inai Eri (イナイエリ) – UTAU voicebank official website</title>
 <meta name="description" content="Official website of Inai Eri (イナイエリ), a UTAU virtual singer. Voicebank download, voice demo, character profile, outfits and credits.">
+<noscript><style>body::before{content:"Inai Eri (イナイエリ) is a UTAU virtual singer: a timid cat-eared girl who overcomes her stage fright through singing. This official website hosts her profile, voice demo, outfits and credits. Please enable JavaScript to view the full site.";display:block;max-width:640px;margin:40px auto;padding:0 20px;font:16px/1.7 sans-serif;color:#1f3550}</style></noscript>
 <link rel="canonical" href="https://inaieriutau.wiki/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Inai Eri">
@@ -20,16 +21,14 @@
 <script src="./support.js"></script>
 </head>
 <body>
-<noscript><div style="max-width:640px;margin:40px auto;padding:0 20px;font-family:sans-serif;color:#1f3550;line-height:1.7"><h1>Inai Eri (イナイエリ)</h1><p>Inai Eri is a UTAU virtual singer: a very introverted and timid cat-eared girl who overcomes her stage fright through singing, dreaming of becoming an idol. This official website hosts her character profile, voice demo (JP VCV), outfits and credits. Please enable JavaScript to view the full site.</p><p><a href="https://www.youtube.com/@InaiEri">YouTube @InaiEri</a></p></div></noscript>
 <x-dc>
 <helmet>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@700;800&family=Mochiy+Pop+One&family=Kosugi+Maru&family=Kiwi+Maru:wght@500&family=Hachi+Maru+Pop&family=Yusei+Magic&display=swap" rel="stylesheet">
 <style>
-html{scroll-padding-top:100px}
+html{scroll-padding-top:100px;scroll-behavior:auto}
 html,body{max-width:100%;overscroll-behavior-x:none}
-@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 :focus-visible{outline:3px solid #1f3550;outline-offset:3px}
 body{margin:0;background:#f3f8fc;color:#1f3550;font-family:'Zen Maru Gothic','Fredoka',sans-serif;-webkit-font-smoothing:antialiased}
 a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
@@ -433,7 +432,13 @@ class Component extends DCLogic {
       const header = document.querySelector('header');
       const off = header ? header.getBoundingClientRect().height + 8 : 90;
       const top = id === 'profile' || !el ? 0 : Math.max(0, el.getBoundingClientRect().top + window.scrollY - off);
-      window.scrollTo({ top, behavior: smooth });
+      cancelAnimationFrame(this._scrollRaf);
+      if (smooth === 'auto') { window.scrollTo({ top, behavior: 'instant' }); }
+      else {
+        const from = window.scrollY, dist = top - from, dur = Math.min(420, 180 + Math.abs(dist) * 0.08), t0 = performance.now();
+        const step = (now) => { const p = Math.min(1, (now - t0) / dur), e2 = 1 - Math.pow(1 - p, 3); window.scrollTo({ top: from + dist * e2, behavior: 'instant' }); if (p < 1) this._scrollRaf = requestAnimationFrame(step); };
+        this._scrollRaf = requestAnimationFrame(step);
+      }
       if (el && id !== 'profile') { el.setAttribute('tabindex', '-1'); el.focus({ preventScroll: true }); }
       try { history.replaceState(null, '', '#' + id); } catch (err) {}
     };
