@@ -1,0 +1,9 @@
+{
+  // Configurazione per Cloudflare Workers Builds:
+  // ogni push su main pubblica il contenuto di inai-eri-site sul Worker inai-eri-website
+  "name": "inai-eri-website",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./inai-eri-site"
+  }
+}
