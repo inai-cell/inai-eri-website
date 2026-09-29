@@ -280,8 +280,8 @@ a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
   <footer style="position:relative;z-index:1;background:linear-gradient(135deg,#c2e7fc 0%,#99d3f8 55%,#84c6f2 100%);color:#1f3550;border-radius:48px 48px 0 0;padding:44px clamp(18px,4vw,40px)">
     <div style="max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
       <div style="display:flex;flex-direction:column;gap:6px">
-        <span style="display:flex;flex-wrap:wrap;align-items:baseline;gap:.35em;font-family:{{ nameFont }};font-weight:{{ nameWeight }};font-size:24px;letter-spacing:.03em;color:#1f3550"><span lang="ja">イナイ エリ</span><span aria-hidden="true" style="color:#fff">・</span><span lang="en">Inai Eri</span></span>
-        <span style="font-size:13px;color:#34506f">{{ t.footer }}</span>
+        <span ref="{{ footNameRef }}" style="display:flex;flex-wrap:nowrap;white-space:nowrap;align-items:baseline;gap:.35em;font-family:{{ nameFont }};font-weight:{{ nameWeight }};font-size:{{ footNameSize }};letter-spacing:.03em;color:#1f3550"><span lang="ja">イナイ エリ</span><span aria-hidden="true" style="color:#fff">・</span><span lang="en">Inai Eri</span></span>
+        <span ref="{{ footTagRef }}" style="font-size:13px;color:#34506f;align-self:flex-start;white-space:nowrap">{{ t.footer }}</span>
         <small style="font-size:12px;color:#34506f">© 2026 Inai Eri. All rights reserved.</small>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -374,7 +374,7 @@ const SKY = Array.from({ length: 16 }, (_, i) => ({
 class Component extends DCLogic {
   state = { lang: null, lineIdx: -1, bursts: [], lightbox: false };
 
-  demoRef = React.createRef(); audioRef = React.createRef(); closeRef = React.createRef(); outfitBtnRef = React.createRef(); nameRef = React.createRef(); cardRef = React.createRef(); rightRef = React.createRef(); artCellRef = React.createRef();
+  footNameRef = React.createRef(); footTagRef = React.createRef(); demoRef = React.createRef(); audioRef = React.createRef(); closeRef = React.createRef(); outfitBtnRef = React.createRef(); nameRef = React.createRef(); cardRef = React.createRef(); rightRef = React.createRef(); artCellRef = React.createRef();
   measure() {
     const n = this.nameRef.current, c = this.cardRef.current, r = this.rightRef.current, a = this.artCellRef.current;
     if (!n || !c || !r || !a) return;
@@ -387,7 +387,20 @@ class Component extends DCLogic {
     const f0 = this.state.frame || {};
     if (f0.top !== frame.top || f0.bottom !== frame.bottom || f0.extra !== frame.extra || this.state.side !== side) this.setState({ frame, side });
   }
+  fitFooter() {
+    const n = this.footNameRef.current, t = this.footTagRef.current;
+    if (!n || !t) return;
+    const cur = parseFloat(getComputedStyle(n).fontSize) || 24;
+    const nw = n.scrollWidth, tw = t.getBoundingClientRect().width;
+    if (!nw || !tw) return;
+    const next = Math.max(14, Math.min(40, +(cur * tw / nw).toFixed(2)));
+    if (Math.abs(next - (this.state.footSize || 24)) > 0.2) this.setState({ footSize: next });
+  }
   componentDidMount() {
+    this._fitT = setTimeout(() => this.fitFooter(), 400);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => this.fitFooter());
+    this._fitRO = new ResizeObserver(() => this.fitFooter());
+    if (this.footTagRef.current) this._fitRO.observe(this.footTagRef.current);
     this.bindAudio();
     this.loadWavDuration();
     this._onResize = () => { const vw = window.innerWidth; if (vw !== this.state.vw) this.setState((st) => ({ vw, menuOpen: vw >= 1080 ? false : st.menuOpen })); };
@@ -499,8 +512,9 @@ class Component extends DCLogic {
     if (au.paused) { const p = au.play(); this.setState({ playing: true }); this.tick(); p && p.catch(() => this.setState({ playing: false })); }
     else au.pause();
   }
-  componentWillUnmount() { cancelAnimationFrame(this._raf); window.removeEventListener('resize', this._onResize); window.removeEventListener('keydown', this._onMenuKey); window.removeEventListener('scroll', this._onScroll); document.removeEventListener('click', this._onClick, true); document.removeEventListener('click', this._onAnchor); clearTimeout(this._shootT); window.removeEventListener('keydown', this._onKey); this._io && this._io.disconnect(); this._ro && this._ro.disconnect(); clearTimeout(this._lt); }
+  componentWillUnmount() { cancelAnimationFrame(this._raf); clearTimeout(this._fitT); this._fitRO && this._fitRO.disconnect(); window.removeEventListener('resize', this._onResize); window.removeEventListener('keydown', this._onMenuKey); window.removeEventListener('scroll', this._onScroll); document.removeEventListener('click', this._onClick, true); document.removeEventListener('click', this._onAnchor); clearTimeout(this._shootT); window.removeEventListener('keydown', this._onKey); this._io && this._io.disconnect(); this._ro && this._ro.disconnect(); clearTimeout(this._lt); }
 
+  componentDidUpdate(pp, ps) { if (ps.lang !== this.state.lang) setTimeout(() => this.fitFooter(), 50); }
   setLang(l) { try { localStorage.setItem('inaiEri.lang', l); } catch (e) {} document.documentElement.lang = l === 'jp' ? 'ja' : 'en'; this.setState({ lang: l }); }
   setMotion(m) { try { localStorage.setItem('inaiEri.motionPref', m ? 'on' : 'off'); } catch (e) {} this.setState({ motion: m }); }
   closeLightbox() { if (!this.state.lightbox) return; this.setState({ lightbox: false }); setTimeout(() => this.outfitBtnRef.current && this.outfitBtnRef.current.focus(), 30); }
@@ -573,6 +587,7 @@ class Component extends DCLogic {
       motion && (this.state.gBursts || []).map((p) => h('span', { key: p.id, style: { position: 'absolute', left: p.x, top: p.y, '--dx': p.dx, '--dy': p.dy, animation: 'ie-pop .8s ease-out forwards' } }, IE_STAR(h, 14, p.c))));
     return {
       t, sky, eq, clickFx,
+      footNameRef: this.footNameRef, footTagRef: this.footTagRef, footNameSize: (this.state.footSize || 24) + 'px',
       ...(() => { const sm = (this.state.vw || 1280) < 600; return { credCols: sm ? 'minmax(0,1fr)' : 'minmax(0,1fr) auto minmax(0,1fr)', credJustify: sm ? 'center' : 'stretch', credGap: sm ? '8px' : '18px', credLeftAlign: sm ? 'center' : 'flex-end', credLeftText: sm ? 'center' : 'right', credRightAlign: sm ? 'center' : 'flex-start', credRightText: sm ? 'center' : 'left', credDot: sm ? 'none' : 'block' }; })(),
       ...(() => { const vw = this.state.vw || 1280, wide = vw >= 1080, open = !wide && !!this.state.menuOpen;
         return { isWide: wide, isCompact: !wide, langInBar: vw >= 400, langInMenu: vw < 400, menuOpen: open, menuVisible: open,
