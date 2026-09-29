@@ -8,6 +8,7 @@
 <body>
 <x-dc>
 <helmet>
+<title>Inai Eri official website</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@700;800&family=Mochiy+Pop+One&family=Kosugi+Maru&family=Kiwi+Maru:wght@500&family=Hachi+Maru+Pop&family=Yusei+Magic&display=swap" rel="stylesheet">
@@ -137,20 +138,22 @@ a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
           </sc-for>
         </dl>
 
-        <div ref="{{ demoRef }}" role="group" aria-label="{{ t.demoTitle }}" style="display:flex;align-items:center;gap:14px;padding:4px 4px 0">
+        <div ref="{{ demoRef }}" role="group" aria-label="{{ t.demoTitle }}" style="display:flex;flex-wrap:wrap;align-items:center;column-gap:14px;row-gap:10px;padding:4px 4px 0">
           <audio ref="{{ audioRef }}" src="assets/voice-demo.wav" preload="metadata"></audio>
           <button type="button" aria-label="{{ playLabel }}" onClick="{{ togglePlay }}" style="width:40px;height:40px;flex:none;border-radius:50%;border:2px solid #99d3f8;background:#fff;cursor:pointer;display:grid;place-items:center;transition:background .2s" style-hover="background:#e3f0fb">
             <sc-if value="{{ isPaused }}" hint-placeholder-val="{{ true }}"><span aria-hidden="true" style="width:0;height:0;margin-left:3px;border-left:11px solid #1f3550;border-top:7px solid transparent;border-bottom:7px solid transparent"></span></sc-if>
             <sc-if value="{{ isPlaying }}" hint-placeholder-val="{{ false }}"><span aria-hidden="true" style="display:flex;gap:4px"><span style="width:3px;height:12px;border-radius:2px;background:#1f3550"></span><span style="width:3px;height:12px;border-radius:2px;background:#1f3550"></span></span></sc-if>
           </button>
           <span style="font-family:'Fredoka','Zen Maru Gothic',sans-serif;font-weight:600;font-size:14px;letter-spacing:.04em;color:#1f3550;flex:none;display:flex;align-items:center;gap:8px">{{ t.demoTitle }}<span style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:12px;letter-spacing:.06em;padding:3px 10px;border-radius:999px;background:#fff;border:2px solid #d7eaf8;color:#2c6a99">JP VCV</span></span>
-          <div style="position:relative;flex:1;min-width:60px;height:28px;display:flex;align-items:center">
+          <div style="display:flex;align-items:center;gap:14px;flex:1 1 220px;min-width:0">
+          <div style="position:relative;flex:1;min-width:0;height:28px;display:flex;align-items:center">
             <div aria-hidden="true" style="position:absolute;left:0;right:0;height:4px;border-radius:4px;background:#e3eef8;box-shadow:{{ seekRing }}"></div>
             <div aria-hidden="true" style="position:absolute;left:0;height:4px;border-radius:4px;background:linear-gradient(90deg,#c2e7fc,#99d3f8);width:{{ progressPct }}"></div>
             <div aria-hidden="true" style="position:absolute;top:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#fff;border:2px solid #99d3f8;box-shadow:0 1px 4px rgba(31,53,80,.15);transform:translateY(-50%);left:{{ progressPct }}"></div>
             <input type="range" min="0" max="{{ durVal }}" step="0.1" value="{{ curVal }}" onChange="{{ seek }}" onFocus="{{ seekFocus }}" onBlur="{{ seekBlur }}" aria-label="{{ t.seekLabel }}" aria-valuetext="{{ timeText }}" style="position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer">
           </div>
-          <span aria-hidden="true" style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4a6582;flex:none">{{ timeText }}</span>
+          <span aria-hidden="true" style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#4a6582;flex:none;white-space:nowrap">{{ timeText }}</span>
+          </div>
         </div>
 
         <div style="display:flex;gap:12px;flex-wrap:wrap">
@@ -229,26 +232,26 @@ a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
       <div data-reveal="1" style="max-width:860px;margin:0 auto;display:flex;flex-direction:column">
         <sc-for list="{{ credits }}" as="c" hint-placeholder-count="3">
           <sc-if value="{{ c.link }}" hint-placeholder-val="{{ true }}">
-          <a href="{{ c.href }}" target="_blank" rel="noopener" style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:18px;padding:22px 8px;border-bottom:2px dotted #d7eaf8;color:#1f3550;transition:background .25s,padding .25s" style-hover="background:rgba(153,211,248,.14);color:#1f3550">
-            <span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right">
+          <a href="{{ c.href }}" target="_blank" rel="noopener" style="display:grid;grid-template-columns:{{ credCols }};justify-items:{{ credJustify }};align-items:center;gap:{{ credGap }};padding:22px 8px;border-bottom:2px dotted #d7eaf8;color:#1f3550;transition:background .25s,padding .25s" style-hover="background:rgba(153,211,248,.14);color:#1f3550">
+            <span style="display:flex;flex-direction:column;align-items:{{ credLeftAlign }};gap:4px;text-align:{{ credLeftText }};min-width:0">
               <span style="font-family:'Fredoka','Zen Maru Gothic',sans-serif;font-weight:600;font-size:13px;letter-spacing:.08em;color:#2c6a99">{{ c.role }}</span>
               <span style="font-size:13px;color:#4a6582">{{ c.note }}</span>
             </span>
-            <span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#99d3f8;box-shadow:0 0 0 5px #e3f0fb"></span>
-            <span style="display:flex;flex-direction:column;align-items:flex-start;gap:4px">
+            <span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#99d3f8;box-shadow:0 0 0 5px #e3f0fb;display:{{ credDot }}"></span>
+            <span style="display:flex;flex-direction:column;align-items:{{ credRightAlign }};gap:4px;text-align:{{ credRightText }};min-width:0;max-width:100%;overflow-wrap:anywhere">
               <span style="font-family:'Fredoka','Zen Maru Gothic',sans-serif;font-weight:600;font-size:clamp(18px,2.2vw,22px);line-height:1.3">{{ c.name }} <span aria-hidden="true" style="color:#2c6a99;font-size:.8em">↗</span></span>
               <span style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#2c6a99">{{ c.site }}</span><span style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">{{ t.newTab }}</span>
             </span>
           </a>
           </sc-if>
           <sc-if value="{{ c.secret }}" hint-placeholder-val="{{ false }}">
-          <div aria-label="{{ c.role }}: {{ c.note }}" style="display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:18px;padding:22px 8px;border-bottom:2px dotted #d7eaf8;color:#1f3550;cursor:help;transition:background .25s" style-hover="background:rgba(153,211,248,.14)">
-            <span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right">
+          <div aria-label="{{ c.role }}: {{ c.note }}" style="display:grid;grid-template-columns:{{ credCols }};justify-items:{{ credJustify }};align-items:center;gap:{{ credGap }};padding:22px 8px;border-bottom:2px dotted #d7eaf8;color:#1f3550;cursor:help;transition:background .25s" style-hover="background:rgba(153,211,248,.14)">
+            <span style="display:flex;flex-direction:column;align-items:{{ credLeftAlign }};gap:4px;text-align:{{ credLeftText }};min-width:0">
               <span style="font-family:'Fredoka','Zen Maru Gothic',sans-serif;font-weight:600;font-size:13px;letter-spacing:.08em;color:#2c6a99">{{ c.role }}</span>
               <span style="font-size:13px;color:#4a6582">{{ c.note }}</span>
             </span>
-            <span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#99d3f8;box-shadow:0 0 0 5px #e3f0fb"></span>
-            <span aria-hidden="true" style="display:flex;flex-direction:column;align-items:flex-start;gap:4px">
+            <span aria-hidden="true" style="width:10px;height:10px;border-radius:50%;background:#99d3f8;box-shadow:0 0 0 5px #e3f0fb;display:{{ credDot }}"></span>
+            <span aria-hidden="true" style="display:flex;flex-direction:column;align-items:{{ credRightAlign }};gap:4px;text-align:{{ credRightText }};min-width:0;max-width:100%;overflow-wrap:anywhere">
               <span style="font-weight:900;font-size:clamp(18px,2.2vw,22px);line-height:1.3;letter-spacing:-.05em;color:#1f3550;display:flex;align-items:center;gap:10px">{{ c.name }}<span style="font-family:'Fredoka',sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;padding:2px 8px;border-radius:6px;border:2px solid #c0392b;color:#a3281b;transform:rotate(-6deg)">SECRET</span></span>
               <span style="font-family:ui-monospace,Menlo,monospace;font-size:13px;color:#2c6a99">{{ c.site }}</span>
             </span>
@@ -540,6 +543,7 @@ class Component extends DCLogic {
       motion && (this.state.gBursts || []).map((p) => h('span', { key: p.id, style: { position: 'absolute', left: p.x, top: p.y, '--dx': p.dx, '--dy': p.dy, animation: 'ie-pop .8s ease-out forwards' } }, IE_STAR(h, 14, p.c))));
     return {
       t, sky, eq, clickFx,
+      ...(() => { const sm = (this.state.vw || 1280) < 600; return { credCols: sm ? 'minmax(0,1fr)' : 'minmax(0,1fr) auto minmax(0,1fr)', credJustify: sm ? 'center' : 'stretch', credGap: sm ? '8px' : '18px', credLeftAlign: sm ? 'center' : 'flex-end', credLeftText: sm ? 'center' : 'right', credRightAlign: sm ? 'center' : 'flex-start', credRightText: sm ? 'center' : 'left', credDot: sm ? 'none' : 'block' }; })(),
       ...(() => { const vw = this.state.vw || 1280, wide = vw >= 1080, open = !wide && !!this.state.menuOpen;
         return { isWide: wide, isCompact: !wide, langInBar: vw >= 400, langInMenu: vw < 400, menuOpen: open, menuVisible: open,
           logoSize: vw < 360 ? '15px' : '17px', motionOn: motion,
