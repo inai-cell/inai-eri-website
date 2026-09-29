@@ -70,8 +70,8 @@ a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
           <button type="button" lang="en" aria-pressed="{{ enPressed }}" onClick="{{ setEN }}" style="border:0;cursor:pointer;font-family:'Fredoka',sans-serif;font-weight:600;font-size:13px;min-height:34px;padding:7px 12px;border-radius:999px;transition:all .2s;background:{{ enBg }};color:{{ enFg }}">EN</button>
           <button type="button" lang="ja" aria-pressed="{{ jpPressed }}" onClick="{{ setJP }}" style="border:0;cursor:pointer;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:13px;min-height:34px;padding:7px 12px;border-radius:999px;transition:all .2s;background:{{ jpBg }};color:{{ jpFg }}">日本語</button>
         </div></sc-if>
-          <button type="button" aria-expanded="{{ menuOpen }}" aria-controls="mobile-menu" aria-label="{{ menuLabel }}" onClick="{{ toggleMenu }}" style="width:44px;height:44px;flex:none;border-radius:50%;border:0;background:{{ menuBtnBg }};cursor:pointer;display:grid;place-items:center;transition:background .2s" style-hover="background:#e3f0fb">
-            <span aria-hidden="true" style="position:relative;width:18px;height:14px;display:block">
+          <button type="button" aria-expanded="{{ menuOpen }}" aria-controls="mobile-menu" aria-label="{{ menuLabel }}" onClick="{{ toggleMenu }}" style="width:44px;height:44px;flex:none;border-radius:50%;border:0;background:{{ menuBtnBg }};cursor:pointer;display:grid;place-items:center;transition:background .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative">
+            <span aria-hidden="true" style="position:relative;width:18px;height:14px;display:block;pointer-events:none">
               <span style="position:absolute;left:0;right:0;height:2px;border-radius:2px;background:#1f3550;transition:transform .25s,top .25s;top:{{ bar1Top }};transform:{{ bar1Rot }}"></span>
               <span style="position:absolute;left:0;right:0;top:6px;height:2px;border-radius:2px;background:#1f3550;transition:opacity .2s;opacity:{{ bar2Op }}"></span>
               <span style="position:absolute;left:0;right:0;height:2px;border-radius:2px;background:#1f3550;transition:transform .25s,top .25s;top:{{ bar3Top }};transform:{{ bar3Rot }}"></span>
@@ -84,7 +84,7 @@ a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
       <nav id="mobile-menu" aria-label="{{ t.navLabel }}" style="max-width:1180px;margin:8px auto 0;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:2px solid #d7eaf8;border-radius:24px;padding:8px;box-shadow:0 16px 40px rgba(31,53,80,.14);display:flex;flex-direction:column;max-height:calc(100vh - 110px);overflow:auto">
         <sc-for list="{{ nav }}" as="n" hint-placeholder-count="5">
           <sc-if value="{{ n.live }}" hint-placeholder-val="{{ true }}">
-            <a href="{{ n.href }}" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:10px 16px;border-radius:16px;font-weight:700;font-size:16px;color:#1f3550;transition:background .2s" style-hover="background:#e3f0fb;color:#1f3550">{{ n.label }}<span aria-hidden="true" style="width:7px;height:7px;border-right:2px solid #99d3f8;border-top:2px solid #99d3f8;transform:rotate(45deg)"></span></a>
+            <a href="{{ n.href }}" onClick="{{ closeMenu }}" style="display:flex;align-items:center;justify-content:space-between;min-height:48px;padding:10px 16px;border-radius:16px;font-weight:700;font-size:16px;color:#1f3550;transition:background .2s;touch-action:manipulation;-webkit-tap-highlight-color:rgba(153,211,248,.25)">{{ n.label }}<span aria-hidden="true" style="width:7px;height:7px;border-right:2px solid #99d3f8;border-top:2px solid #99d3f8;transform:rotate(45deg)"></span></a>
           </sc-if>
           <sc-if value="{{ n.soon }}" hint-placeholder-val="{{ false }}">
             <span aria-disabled="true" style="display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:48px;padding:10px 16px;border-radius:16px;font-weight:700;font-size:16px;color:#94a8bc">{{ n.label }}<span style="font-family:'Fredoka','Zen Maru Gothic',sans-serif;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:#fdeadb;border:1px solid #f1ac71;color:#8a4518">{{ soonLabel }}</span></span>
@@ -567,7 +567,7 @@ class Component extends DCLogic {
           menuBtnBg: open ? '#e3f0fb' : 'transparent',
           bar1Top: open ? '6px' : '0px', bar1Rot: open ? 'rotate(45deg)' : 'none', bar2Op: open ? 0 : 1,
           bar3Top: open ? '6px' : '12px', bar3Rot: open ? 'rotate(-45deg)' : 'none',
-          toggleMenu: () => this.setState((st) => ({ menuOpen: !st.menuOpen })),
+          toggleMenu: (e) => { if (e) e.stopPropagation(); const now = Date.now(); if (this._lastToggle && now - this._lastToggle < 350) return; this._lastToggle = now; this.setState((st) => ({ menuOpen: !st.menuOpen })); },
           closeMenu: () => this.state.menuOpen && this.setState({ menuOpen: false }) }; })(),
       topOpacity: this.state.showTop ? 1 : 0, topTransform: this.state.showTop ? 'translateY(0)' : 'translateY(16px)',
       topPE: this.state.showTop ? 'auto' : 'none', topTab: this.state.showTop ? 0 : -1, topHidden: !this.state.showTop,
