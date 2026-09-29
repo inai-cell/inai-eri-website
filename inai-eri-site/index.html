@@ -13,11 +13,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Zen+Maru+Gothic:wght@400;500;700;900&family=M+PLUS+Rounded+1c:wght@700;800&family=Mochiy+Pop+One&family=Kosugi+Maru&family=Kiwi+Maru:wght@500&family=Hachi+Maru+Pop&family=Yusei+Magic&display=swap" rel="stylesheet">
 <style>
-html{scroll-padding-top:100px;overflow-x:hidden}
+html{scroll-padding-top:100px}
 html,body{max-width:100%;overscroll-behavior-x:none}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 :focus-visible{outline:3px solid #1f3550;outline-offset:3px}
-body{margin:0;background:#f3f8fc;color:#1f3550;font-family:'Zen Maru Gothic','Fredoka',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:#f3f8fc;color:#1f3550;font-family:'Zen Maru Gothic','Fredoka',sans-serif;-webkit-font-smoothing:antialiased}
 a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
 *{box-sizing:border-box}
 @keyframes ie-float{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-8px) rotate(.6deg)}}
@@ -395,6 +395,22 @@ class Component extends DCLogic {
       setTimeout(() => this.setState((st) => ({ gBursts: (st.gBursts || []).filter((p) => !p.id.startsWith(id + '-')) })), 800);
     };
     document.addEventListener('click', this._onClick, true);
+    this._onAnchor = (e) => {
+      const a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey) return;
+      const id = a.getAttribute('href').slice(1);
+      const smooth = (this.state.motion ?? (this.props.motion ?? true)) ? 'smooth' : 'auto';
+      const el = id && document.getElementById(id);
+      if (!el && id !== '') return;
+      e.preventDefault();
+      const header = document.querySelector('header');
+      const off = header ? header.getBoundingClientRect().height + 8 : 90;
+      const top = id === 'profile' || !el ? 0 : Math.max(0, el.getBoundingClientRect().top + window.scrollY - off);
+      window.scrollTo({ top, behavior: smooth });
+      if (el && id !== 'profile') { el.setAttribute('tabindex', '-1'); el.focus({ preventScroll: true }); }
+      try { history.replaceState(null, '', '#' + id); } catch (err) {}
+    };
+    document.addEventListener('click', this._onAnchor);
     const shoot = () => {
       this.setState({ shoot: { id: Date.now(), left: 45 + Math.random() * 50, top: 2 + Math.random() * 28 } });
       this._shootT = setTimeout(shoot, 7000 + Math.random() * 7000);
@@ -469,7 +485,7 @@ class Component extends DCLogic {
     if (au.paused) { const p = au.play(); this.setState({ playing: true }); this.tick(); p && p.catch(() => this.setState({ playing: false })); }
     else au.pause();
   }
-  componentWillUnmount() { cancelAnimationFrame(this._raf); window.removeEventListener('resize', this._onResize); window.removeEventListener('keydown', this._onMenuKey); window.removeEventListener('scroll', this._onScroll); document.removeEventListener('click', this._onClick, true); clearTimeout(this._shootT); window.removeEventListener('keydown', this._onKey); this._io && this._io.disconnect(); this._ro && this._ro.disconnect(); clearTimeout(this._lt); }
+  componentWillUnmount() { cancelAnimationFrame(this._raf); window.removeEventListener('resize', this._onResize); window.removeEventListener('keydown', this._onMenuKey); window.removeEventListener('scroll', this._onScroll); document.removeEventListener('click', this._onClick, true); document.removeEventListener('click', this._onAnchor); clearTimeout(this._shootT); window.removeEventListener('keydown', this._onKey); this._io && this._io.disconnect(); this._ro && this._ro.disconnect(); clearTimeout(this._lt); }
 
   setLang(l) { try { localStorage.setItem('inaiEri.lang', l); } catch (e) {} document.documentElement.lang = l === 'jp' ? 'ja' : 'en'; this.setState({ lang: l }); }
   setMotion(m) { try { localStorage.setItem('inaiEri.motionPref', m ? 'on' : 'off'); } catch (e) {} this.setState({ motion: m }); }
