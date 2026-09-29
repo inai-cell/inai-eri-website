@@ -120,7 +120,7 @@ a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
           <h1 lang="{{ nameLang }}" style="margin:0;display:flex;flex-wrap:wrap;align-items:baseline;gap:.35em;font-family:{{ nameFont }};font-weight:{{ nameWeight }};font-size:clamp(24px,2.8vw,34px);line-height:1.2;letter-spacing:.03em;color:#1f3550"><span lang="ja">イナイ エリ</span><span aria-hidden="true" style="color:#99d3f8">・</span><span lang="en">Inai Eri</span></h1>
           <div style="margin-top:8px;display:flex;align-items:center;gap:12px">
             <span style="flex:1;height:2px;background:repeating-linear-gradient(90deg,#9cc8ec 0 6px,transparent 6px 12px)"></span>
-            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" style="display:block;flex:none"><path d="M12 3.6l2.5 5.2 5.7.8-4.1 4 1 5.7L12 16.6l-5.1 2.7 1-5.7-4.1-4 5.7-.8z" fill="#f1ac71" stroke="#f1ac71" stroke-width="3.2" stroke-linejoin="round"></path></svg>
+            <svg aria-hidden="true" focusable="false" viewBox="0 1 24 24" width="22" height="22" style="display:block;flex:none"><path d="M12 3.6l2.5 5.2 5.7.8-4.1 4 1 5.7L12 16.6l-5.1 2.7 1-5.7-4.1-4 5.7-.8z" fill="#f1ac71" stroke="#f1ac71" stroke-width="3.2" stroke-linejoin="round"></path></svg>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.9;color:#34506f;text-wrap:pretty">
@@ -271,7 +271,7 @@ a{color:#2c6a99;text-decoration:none}a:hover{color:#1f3550}
         <small style="font-size:12px;color:#34506f">© 2026 Inai Eri. All rights reserved.</small>
       </div>
       <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <a href="https://www.youtube.com/@InaiEri" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:9px;min-height:44px;padding:10px 20px 10px 16px;border-radius:999px;background:#fff;border:1.5px solid #99d3f8;color:#1f3550;font-weight:500;font-size:14px;letter-spacing:.02em;transition:background .2s,border-color .2s,transform .2s" style-hover="background:#eef7fe;border-color:#6fb8ea;transform:translateY(-1px);color:#1f3550" style-active="transform:translateY(0)"><span aria-hidden="true" style="width:22px;height:16px;border-radius:5px;background:#ff0033;display:grid;place-items:center;flex:none"><span style="width:0;height:0;margin-left:2px;border-left:8px solid #fff;border-top:5px solid transparent;border-bottom:5px solid transparent"></span></span>{{ t.ytBtn }}<span style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">{{ t.newTab }}</span></a>
+        <a href="https://www.youtube.com/@InaiEri" target="_blank" rel="noopener" aria-label="YouTube @InaiEri{{ t.newTab }}" title="YouTube @InaiEri" style="display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:#fff;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(31,53,80,.1)" style-hover="transform:translateY(-2px);box-shadow:0 8px 20px rgba(31,53,80,.16)"><span aria-hidden="true" style="width:28px;height:20px;border-radius:6px;background:#ff0033;display:grid;place-items:center"><span style="width:0;height:0;margin-left:2px;border-left:8px solid #fff;border-top:5px solid transparent;border-bottom:5px solid transparent"></span></span></a>
       </div>
     </div>
   </footer>
@@ -299,9 +299,9 @@ const IE_T = {
     thanks: 'Thank you so much to everyone who helped bring Eri to life!',
     credits: [['Voice provider','████','Top secret!','','? ? ? ?'],['Main art','@potaken_','Main character illustration','https://www.instagram.com/potaken_/','instagram.com/potaken_'],['Outfit design','Transt','Idol dress concept & art','https://vgen.co/Transt','vgen.co/Transt'],['Special thanks','Ryankun12 / Mangosiryan12','For helping create the voicebank','https://www.youtube.com/arashifanboy111','youtube.com/arashifanboy111']],
     lead: 'Very introverted and timid.',
-    desc1: 'Despite performing in front of an audience, she is extremely shy and reserved in her everyday life. She often struggles to express herself and tends to keep her thoughts to herself.',
-    desc2: 'Singing is one of the few ways she can freely express what she feels. Whenever she takes the stage, she gathers her courage and does her best to become the idol she dreams of being.',
-    stats: [['Gender','Girl'],['Height','160cm'],['Weight','40kg'],['Age','1 year old (cat age)'],['Birthday','September 16'],['Personality','Timid'],['Likes','Pudding, Rin Kagamine'],['Dislikes','Large crowds, speaking in front of people']],
+    desc1: 'Despite performing in front of an audience, she is quiet in her daily life and has difficulty communicating with others, often keeping her thoughts to herself.',
+    desc2: 'Singing is one of the few ways she can freely express what she feels. Although she still suffers from stage fright, she overcomes it during performances in order to become the idol she aspires to be.',
+    stats: [['Gender','Girl'],['Height','160cm'],['Weight','40kg'],['Age','1 year old (cat age)'],['Birthday','September 16'],['Personality','Bashful'],['Likes','Pudding, Rin Kagamine'],['Dislikes','Large crowds, speaking in front of people']],
     ytBtn: 'YouTube channel',
     tapHint: '← tap her to say hi',
     coverTitle: 'Latest Cover', coverSub: '最新カバー',
@@ -327,9 +327,9 @@ const IE_T = {
     thanks: 'エリの誕生に協力してくださった皆さま、本当にありがとうございます！',
     credits: [['声の提供','████','トップシークレット！','','? ? ? ?'],['メインイラスト','@potaken_','キャラクターメインイラスト','https://www.instagram.com/potaken_/','instagram.com/potaken_'],['衣装デザイン','Transt','アイドル衣装（コンセプト・イラスト）','https://vgen.co/Transt','vgen.co/Transt'],['スペシャルサンクス','Ryankun12 / Mangosiryan12','音源制作にご協力いただきました','https://www.youtube.com/arashifanboy111','youtube.com/arashifanboy111']],
     lead: 'とても内向的で、臆病な女の子。',
-    desc1: '観客の前でパフォーマンスをしているのに、普段の生活ではとても恥ずかしがり屋で控えめ。自分の気持ちを表現するのが苦手で、思っていることを胸の内にしまいこんでしまいがち。',
-    desc2: '歌は、彼女が感じていることを自由に表現できる数少ない方法のひとつ。ステージに立つたびに勇気をふりしぼり、夢見るアイドルになるために一生懸命がんばっている。',
-    stats: [['性別','女の子'],['身長','160cm'],['体重','40kg'],['年齢','1歳（猫年齢）'],['誕生日','9月16日'],['性格','臆病'],['好きなもの','プリン、鏡音リン'],['苦手なもの','人混み、人前で話すこと']],
+    desc1: '観客の前でパフォーマンスをしているのに、普段はおとなしく、人とのコミュニケーションが苦手。思っていることを胸の内にしまいこんでしまいがち。',
+    desc2: '歌は、彼女が感じていることを自由に表現できる数少ない方法のひとつ。今でもステージではあがってしまうけれど、憧れのアイドルになるために、パフォーマンス中はその緊張を乗り越えている。',
+    stats: [['性別','女の子'],['身長','160cm'],['体重','40kg'],['年齢','1歳（猫年齢）'],['誕生日','9月16日'],['性格','恥ずかしがり屋'],['好きなもの','プリン、鏡音リン'],['苦手なもの','人混み、人前で話すこと']],
     ytBtn: 'YouTubeチャンネル',
     tapHint: '← タップしてみてね',
     coverTitle: '最新カバー', coverSub: 'Latest Cover',
