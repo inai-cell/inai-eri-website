@@ -519,7 +519,7 @@ class Component extends DCLogic {
   }
   componentWillUnmount() { cancelAnimationFrame(this._raf); clearTimeout(this._fitT); this._fitRO && this._fitRO.disconnect(); window.removeEventListener('resize', this._onResize); window.removeEventListener('keydown', this._onMenuKey); window.removeEventListener('scroll', this._onScroll); document.removeEventListener('click', this._onClick, true); document.removeEventListener('click', this._onAnchor); clearTimeout(this._shootT); window.removeEventListener('keydown', this._onKey); this._io && this._io.disconnect(); this._ro && this._ro.disconnect(); clearTimeout(this._lt); }
 
-  componentDidUpdate(pp, ps) { if (ps.lang !== this.state.lang) setTimeout(() => this.fitFooter(), 50); }
+  componentDidUpdate() { if (this._lastLang !== this.state.lang) { this._lastLang = this.state.lang; setTimeout(() => this.fitFooter(), 50); } }
   setLang(l) { try { localStorage.setItem('inaiEri.lang', l); } catch (e) {} document.documentElement.lang = l === 'jp' ? 'ja' : 'en'; this.setState({ lang: l }); }
   setMotion(m) { try { localStorage.setItem('inaiEri.motionPref', m ? 'on' : 'off'); } catch (e) {} this.setState({ motion: m }); }
   closeLightbox() { if (!this.state.lightbox) return; this.setState({ lightbox: false }); setTimeout(() => this.outfitBtnRef.current && this.outfitBtnRef.current.focus(), 30); }
